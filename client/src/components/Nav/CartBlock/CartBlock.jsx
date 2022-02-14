@@ -31,31 +31,31 @@ class CartBlock extends React.Component {
 
   render() {
     const togglePopup = () => {
-      this.props.dispatch(toggleCartBlock());
+      this.props.dispatchCartBlock();
     };
 
     const onPlusCart = (item) => {
-      this.props.dispatch(addToCart(item));
+      this.props.dispatchAddToCart(item);
     };
     const onMinusCart = (item) => {
-      this.props.dispatch(minusCart(item));
+      this.props.dispatchMinusCart(item);
     };
 
     this.closePopup = (e) => {
       this.props.toggleCartBlock &&
         !e.path.includes(this.cartBlockRef.current) &&
-        this.props.dispatch(toggleCartBlock(false));
+        this.props.dispatchCartBlock(false);
     };
 
     const onRemoveItem = (item) => {
       if (window.confirm("Are you sure to remove item?")) {
-        this.props.dispatch(removeItem(item));
+        this.props.dispatchRemoveItem(item);
       }
     };
 
     const onCheckout = () => {
       window.confirm("Confirm your Order please!") &&
-        this.props.dispatch(cleanCart());
+        this.props.dispatchCleanCart();
 
       window.alert("Your order has been sent sucessfully");
     };
@@ -119,7 +119,7 @@ class CartBlock extends React.Component {
                 className="btn"
                 onClick={() => {
                   togglePopup();
-                  this.props.dispatch(cart());
+                  this.props.dispatchCart();
                 }}
               >
                 View Bag
@@ -139,7 +139,30 @@ class CartBlock extends React.Component {
   }
 }
 
-const mapStateToProps = function (state) {
+const mapDispatchToProps = (dispatch) => {
+  return {
+    dispatchCartBlock: (param) => {
+      dispatch(toggleCartBlock(param));
+    },
+    dispatchAddToCart: (item) => {
+      dispatch(addToCart(item));
+    },
+    dispatchMinusCart: (item) => {
+      dispatch(minusCart(item));
+    },
+    dispatchRemoveItem: (item) => {
+      dispatch(removeItem(item));
+    },
+    dispatchCleanCart: () => {
+      dispatch(cleanCart());
+    },
+    dispatchCart: () => {
+      dispatch(cart());
+    },
+  };
+};
+
+const mapStateToProps = (state) => {
   return {
     toggleCartBlock: state.nav.toggleCartBlock,
     currency: state.nav.activeCurrency,
@@ -147,4 +170,4 @@ const mapStateToProps = function (state) {
   };
 };
 
-export default connect(mapStateToProps)(CartBlock);
+export default connect(mapStateToProps, mapDispatchToProps)(CartBlock);

@@ -12,14 +12,14 @@ import emptyCartImg from "../assets/images/cartEmpty.jpg";
 class CartPage extends React.Component {
   render() {
     const onPlusCart = (item) => {
-      this.props.dispatch(addToCart(item));
+      this.props.dispatchAddToCart(item);
     };
     const onMinusCart = (item) => {
-      this.props.dispatch(minusCart(item));
+      this.props.dispatchMinusCart(item);
     };
     const onRemoveItem = (item) => {
       if (window.confirm("Are you sure to remove item?")) {
-        this.props.dispatch(removeItem(item));
+        this.props.dispatchRemoveItem(item);
       }
     };
     return (
@@ -48,7 +48,7 @@ class CartPage extends React.Component {
               <Link
                 to="/"
                 onClick={() => {
-                  this.props.dispatch(activeCategory("all"));
+                  this.props.dispatchActiveCategory("all");
                 }}
               >
                 <button>GO BACK HOME</button>
@@ -61,6 +61,23 @@ class CartPage extends React.Component {
   }
 }
 
+const mapDispatchToProps = (dispatch) => {
+  return {
+    dispatchAddToCart: (item) => {
+      dispatch(addToCart(item));
+    },
+    dispatchMinusCart: (item) => {
+      dispatch(minusCart(item));
+    },
+    dispatchRemoveItem: (item) => {
+      dispatch(removeItem(item));
+    },
+    dispatchActiveCategory: (category) => {
+      dispatch(activeCategory(category));
+    },
+  };
+};
+
 const mapStateToProps = (state) => {
   return {
     cart: state.cart,
@@ -68,4 +85,4 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps)(CartPage);
+export default connect(mapStateToProps, mapDispatchToProps)(CartPage);

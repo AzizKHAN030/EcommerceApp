@@ -24,13 +24,13 @@ class CurrencyBlock extends React.Component {
   }
   render() {
     const toggleBlock = () => {
-      this.props.dispatch(toggleCurrencyBlock());
+      this.props.dispatchCurrencyBlock();
     };
 
     this.closeBlock = (e) => {
       this.props.toggleCurrencyBlock &&
         !e.path.includes(this.currencyPopupRef.current) &&
-        this.props.dispatch(toggleCurrencyBlock(false));
+        this.props.dispatchCurrencyBlock(false);
     };
 
     const {
@@ -38,7 +38,7 @@ class CurrencyBlock extends React.Component {
     } = this.props;
 
     const setActiveCurrency = (currency) => {
-      this.props.dispatch(activeCurrency(currency));
+      this.props.dispatchActiveCurrency(currency);
     };
 
     if (loading) {
@@ -77,13 +77,25 @@ class CurrencyBlock extends React.Component {
   }
 }
 
-const mapStateToProps = function (state) {
+const mapDispatchToProps = (dispatch) => {
+  return {
+    dispatchCurrencyBlock: (param) => {
+      dispatch(toggleCurrencyBlock(param));
+    },
+    dispatchActiveCurrency: (currency) => {
+      dispatch(activeCurrency(currency));
+    },
+  };
+};
+
+const mapStateToProps = (state) => {
   return {
     toggleCurrencyBlock: state.nav.toggleCurrencyBlock,
     activeCurrency: state.nav.activeCurrency,
   };
 };
 
-export default connect(mapStateToProps)(
-  graphql(fetchCurrencies)(CurrencyBlock)
-);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(graphql(fetchCurrencies)(CurrencyBlock));

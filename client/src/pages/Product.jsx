@@ -17,30 +17,26 @@ class Product extends React.Component {
     super(props);
     this.state = { added: false };
   }
-  componentDidMount() {
-    this.props.dispatch(setActiveImg());
-    this.props.dispatch(unsetParams());
 
+  componentDidMount() {
+    this.props.dispatchActiveImg();
+    this.props.dispatchUnsetParams();
     this.props.data.loading === false &&
-      this.props.data.product.attributes.map((param) => {
-        this.props.dispatch(
-          setActiveParams({
-            paramName: param.name,
-            paramValue: param.items[0].value,
-          })
-        );
+      this.props.data.product.attributes.forEach((param) => {
+        this.props.dispatchActiveParams({
+          paramName: param.name,
+          paramValue: param.items[0].value,
+        });
       });
   }
 
   componentDidUpdate(prevProps) {
     if (this.props.data.loading !== prevProps.data.loading) {
       this.props.data.product.attributes.map((param) => {
-        this.props.dispatch(
-          setActiveParams({
-            paramName: param.name,
-            paramValue: param.items[0].value,
-          })
-        );
+        this.props.dispatchActiveParams({
+          paramName: param.name,
+          paramValue: param.items[0].value,
+        });
       });
     }
   }
@@ -51,14 +47,14 @@ class Product extends React.Component {
     } = this.props;
 
     const clickImg = (src) => {
-      this.props.dispatch(setActiveImg(src));
+      this.props.dispatchActiveImg(src);
     };
     const setParams = (obj) => {
-      this.props.dispatch(setActiveParams(obj));
+      this.props.dispatchActiveParams(obj);
     };
 
     const addCartItem = (obj) => {
-      this.props.dispatch(addToCart(obj));
+      this.props.dispatchAddToCart(obj);
       this.setState({
         added: true,
       });
@@ -214,7 +210,16 @@ class Product extends React.Component {
   }
 }
 
-const mapStateToProps = function (state) {
+const mapDispatchToProps = (dispatch) => {
+  return {
+    dispatchActiveImg: (img) => dispatch(setActiveImg(img)),
+    dispatchActiveParams: (obj) => dispatch(setActiveParams(obj)),
+    dispatchUnsetParams: () => dispatch(unsetParams()),
+    dispatchAddToCart: (item) => dispatch(addToCart(item)),
+  };
+};
+
+const mapStateToProps = (state) => {
   return {
     activeImg: state.product.activeImg,
     activeParams: state.product.activeParams,
@@ -222,7 +227,10 @@ const mapStateToProps = function (state) {
   };
 };
 
-export default connect(mapStateToProps)(
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(
   withRouter(
     graphql(getProduct, {
       options: (props) => ({ variables: { id: props.match.params.id } }),

@@ -4,6 +4,24 @@ import CartIco from "../assets/icons/CartIco";
 
 class productBlock extends React.Component {
   render() {
+    const onAddToCart = () => {
+      const productParams = this.props.product.attributes.map((param) => {
+        return {
+          paramName: param.name,
+          paramValue: param.items[0].value,
+        };
+      });
+
+      this.props.onAddToCart({
+        id: this.props.product.id,
+        itemName: this.props.product.name,
+        itemBrand: this.props.product.brand,
+        itemGallery: this.props.product.gallery,
+        itemPrice: this.props.product.prices,
+        params: productParams,
+      });
+    };
+
     return (
       <div
         className={`productBlock ${
@@ -18,26 +36,7 @@ class productBlock extends React.Component {
             )}
           </div>
         </Link>
-        <button
-          className="productBlock__btn"
-          onClick={() => {
-            const productParams = this.props.product.attributes.map((param) => {
-              return {
-                paramName: param.name,
-                paramValue: param.items[0].value,
-              };
-            });
-
-            this.props.onAddToCart({
-              id: this.props.product.id,
-              itemName: this.props.product.name,
-              itemBrand: this.props.product.brand,
-              itemGallery: this.props.product.gallery,
-              itemPrice: this.props.product.prices,
-              params: productParams,
-            });
-          }}
-        >
+        <button className="productBlock__btn" onClick={onAddToCart}>
           <CartIco />
         </button>
         <h3 className="productBlock__title">{this.props.product.name}</h3>

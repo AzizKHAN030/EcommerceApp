@@ -10,7 +10,7 @@ import { activeCategory } from "../../redux/actions/nav";
 class Categories extends React.Component {
   render() {
     const handleClick = (category) => {
-      this.props.dispatch(activeCategory(category));
+      this.props.dispatchActiveCategory(category);
     };
 
     const {
@@ -46,10 +46,21 @@ class Categories extends React.Component {
   }
 }
 
-const mapStateToProps = function (state) {
+const mapDispatchToProps = (dispatch) => {
+  return {
+    dispatchActiveCategory: (category) => {
+      dispatch(activeCategory(category));
+    },
+  };
+};
+
+const mapStateToProps = (state) => {
   return {
     activeCategory: state.nav.activeCategory,
   };
 };
 
-export default connect(mapStateToProps)(graphql(fetchCategories)(Categories));
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(graphql(fetchCategories)(Categories));

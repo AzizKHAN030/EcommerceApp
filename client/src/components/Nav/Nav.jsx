@@ -12,7 +12,7 @@ import { cart } from "../../redux/actions/nav";
 class Nav extends React.Component {
   render() {
     const clickCart = () => {
-      this.props.dispatch(cart());
+      this.props.dispatchCart();
     };
     return (
       <>
@@ -37,11 +37,19 @@ class Nav extends React.Component {
   }
 }
 
-const mapStateToProps = function (state) {
+const mapDispatchToProps = (dispatch) => {
+  return {
+    dispatchCart: () => {
+      dispatch(cart());
+    },
+  };
+};
+
+const mapStateToProps = (state) => {
   return {
     activeCategory: state.nav.activeCategory,
     toggleCartBlock: state.nav.toggleCartBlock,
   };
 };
 
-export default connect(mapStateToProps)(Nav);
+export default connect(mapStateToProps, mapDispatchToProps)(Nav);

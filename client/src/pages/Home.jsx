@@ -20,7 +20,7 @@ class Home extends React.Component {
     } = this.props;
 
     const addToCartItem = (obj) => {
-      this.props.dispatch(addToCart(obj));
+      this.props.dispatchAddToCart(obj);
       this.setState({
         added: true,
       });
@@ -65,14 +65,25 @@ class Home extends React.Component {
   }
 }
 
-const mapStateToProps = function (state) {
+const mapDispatchToProps = (dispatch) => {
+  return {
+    dispatchAddToCart: (item) => {
+      dispatch(addToCart(item));
+    },
+  };
+};
+
+const mapStateToProps = (state) => {
   return {
     activeCategory: state.nav.activeCategory,
     activeCurrency: state.nav.activeCurrency,
   };
 };
 
-export default connect(mapStateToProps)(
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(
   graphql(fetchProducts, {
     options: (props) => ({
       variables: { title: props.activeCategory ?? "all" },
