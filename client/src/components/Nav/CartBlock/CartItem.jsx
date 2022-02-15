@@ -17,7 +17,11 @@ class CartItem extends React.Component {
           <p className="item__name">{this.props.item.items[0].itemName}</p>
           <h3 className="item__price">
             {this.props.currency}
-            {this.props.item.totalItemPrice[this.props.currency].toFixed(2)}
+            {
+              this.props.item.items[0].itemPrice.find(
+                (price) => price.currency.symbol === this.props.currency
+              ).amount
+            }
           </h3>
 
           <ul className="item__params">

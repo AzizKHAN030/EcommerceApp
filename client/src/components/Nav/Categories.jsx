@@ -14,7 +14,7 @@ class Categories extends React.Component {
     };
 
     const {
-      data: { loading, errors, categories },
+      data: { loading, categories },
     } = this.props;
     if (loading) {
       return <></>;

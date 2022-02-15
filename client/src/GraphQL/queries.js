@@ -14,6 +14,7 @@ export const fetchProducts = gql`
       products {
         id
         name
+        brand
         inStock
         gallery
         prices {
@@ -49,6 +50,7 @@ export const getProduct = gql`
       id
       brand
       name
+
       inStock
       gallery
       description

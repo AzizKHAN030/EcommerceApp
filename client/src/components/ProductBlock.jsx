@@ -39,7 +39,8 @@ class productBlock extends React.Component {
         <button className="productBlock__btn" onClick={onAddToCart}>
           <CartIco />
         </button>
-        <h3 className="productBlock__title">{this.props.product.name}</h3>
+        <h3 className="productBlock__brand">{this.props.product.brand}</h3>
+        <h4 className="productBlock__title">{this.props.product.name}</h4>
         <p className="productBlock__price">
           {this.props.currency + " "}
           {

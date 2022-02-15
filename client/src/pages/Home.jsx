@@ -9,23 +9,30 @@ import LoadingSpinner from "../components/LoadingSpinner";
 import { addToCart } from "../redux/actions/cart";
 
 class Home extends React.Component {
+  notificationTimer;
   constructor(props) {
     super(props);
     this.state = { added: false };
   }
 
+  componentWillUnmount() {
+    clearTimeout(this.notificationTimer);
+  }
+
   render() {
     const {
-      data: { loading, errors, products },
+      data: { loading },
     } = this.props;
 
     const addToCartItem = (obj) => {
+      clearTimeout(this.notificationTimer);
+
       this.props.dispatchAddToCart(obj);
       this.setState({
         added: true,
       });
 
-      setTimeout(() => {
+      this.notificationTimer = setTimeout(() => {
         this.setState({
           added: false,
         });

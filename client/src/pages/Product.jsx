@@ -3,6 +3,8 @@ import React from "react";
 import { withRouter } from "react-router-dom/cjs/react-router-dom.min";
 import { graphql } from "@apollo/client/react/hoc";
 import { connect } from "react-redux";
+import { Parser } from "html-to-react";
+
 import { getProduct } from "../GraphQL/queries";
 import {
   setActiveImg,
@@ -13,6 +15,7 @@ import { addToCart } from "../redux/actions/cart";
 import LoadingSpinner from "../components/LoadingSpinner";
 
 class Product extends React.Component {
+  notificationTimer;
   constructor(props) {
     super(props);
     this.state = { added: false };
@@ -32,7 +35,7 @@ class Product extends React.Component {
 
   componentDidUpdate(prevProps) {
     if (this.props.data.loading !== prevProps.data.loading) {
-      this.props.data.product.attributes.map((param) => {
+      this.props.data.product.attributes.forEach((param) => {
         this.props.dispatchActiveParams({
           paramName: param.name,
           paramValue: param.items[0].value,
@@ -41,9 +44,13 @@ class Product extends React.Component {
     }
   }
 
+  componentWillUnmount() {
+    clearTimeout(this.notificationTimer);
+  }
+
   render() {
     const {
-      data: { loading, errors, product },
+      data: { loading, product },
     } = this.props;
 
     const clickImg = (src) => {
@@ -54,12 +61,14 @@ class Product extends React.Component {
     };
 
     const addCartItem = (obj) => {
+      clearTimeout(this.notificationTimer);
+
       this.props.dispatchAddToCart(obj);
       this.setState({
         added: true,
       });
 
-      setTimeout(() => {
+      this.notificationTimer = setTimeout(() => {
         this.setState({
           added: false,
         });
@@ -192,10 +201,9 @@ class Product extends React.Component {
               >
                 {product.inStock ? "ADD TO CART" : "OUT OF STOCK"}
               </button>
-              <div
-                className="product__desc"
-                dangerouslySetInnerHTML={{ __html: product.description }}
-              />
+              <div className="product__desc">
+                {Parser().parse(product.description)}
+              </div>
             </div>
           </div>
           <div

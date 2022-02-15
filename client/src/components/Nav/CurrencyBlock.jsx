@@ -34,7 +34,7 @@ class CurrencyBlock extends React.Component {
     };
 
     const {
-      data: { loading, errors, currencies },
+      data: { loading, currencies },
     } = this.props;
 
     const setActiveCurrency = (currency) => {
