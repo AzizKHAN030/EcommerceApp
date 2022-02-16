@@ -211,7 +211,15 @@
             display: flex;
             align-items: center;
 
+
+            &.active {
+                img {
+                    transform: rotate(180deg);
+                }
+            }
+
             img {
+                transition: .3s;
                 margin-left: 10px;
             }
         }

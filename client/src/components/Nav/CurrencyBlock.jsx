@@ -50,7 +50,11 @@ class CurrencyBlock extends React.Component {
           ref={this.currencyPopupRef}
           onClick={toggleBlock}
         >
-          <div className="nav__currency-label">
+          <div
+            className={`nav__currency-label ${
+              this.props.toggleCurrencyBlock ? "active" : ""
+            }`}
+          >
             {this.props.activeCurrency} <img src={arrowIco} alt="" />
           </div>
           <ul
