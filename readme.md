@@ -1,6 +1,6 @@
 # BACKEND SERVER:
 
-## GraphQL endpoint for Junior Developer position in Scandiweb
+## GraphQL endpoint
 
 ### Overview
 
